@@ -1,0 +1,8 @@
+prefix=/home/pgautrea/cdfr_ros/ros_ws/devel
+
+Name: robot_2W
+Description: Description of robot_2W
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

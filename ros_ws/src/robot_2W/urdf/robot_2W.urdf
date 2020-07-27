@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+    <robot name="robot_2W">
+        <link name="base_link">
+            <visual>
+                <geometry>
+                    <box size="0.2 .3 .1"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="0 0 0.05"/>
+                <material name="white">
+                    <color rgba="1 1 1 1"/>
+                </material>
+            </visual>
+        </link>
+
+        <link name="wheel_1">
+            <visual>
+                <geometry>
+                    <cylinder length="0.05" radius="0.05"/>
+                </geometry>
+                <origin rpy="1.57 0 0" xyz="0 0.025 0"/>
+                <material name="black">
+                    <color rgba="0 0 0 1"/>
+                </material>
+            </visual>
+        </link>
+
+        <link name="wheel_2">
+            <visual>
+                <geometry>
+                    <cylinder length="0.05" radius="0.05"/>
+                </geometry>
+                <origin rpy="1.57 0 0" xyz="0 -0.025 0"/>
+                <material name="black"/>
+            </visual>
+        </link>
+
+        <link name="contact_front">
+            <visual>
+                <geometry>
+                    <sphere radius="0.025"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="0.075 0 -0.025"/>
+                <material name="blue">
+                    <color rgba="0 0 1 1"/>
+                </material>
+            </visual>
+        </link>
+
+        <link name="contact_back">
+            <visual>
+                <geometry>
+                    <sphere radius="0.025"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="-0.075 0 -0.025"/>
+                <material name="blue"/>
+            </visual>
+        </link>
+
+        <joint name="base_to_wheel1" type="revolute">
+            <axis xyz="0 1 0"/>
+            <origin xyz="0 0.15 0"/>
+            <limit effort="1000.0" lower="-1.0" upper="1.0" velocity="0.5"/>
+            <parent link="base_link"/>
+            <child link="wheel_1"/>
+        </joint>
+
+        <joint name="base_to_wheel2" type="revolute">
+            <parent link="base_link"/>
+            <child link="wheel_2"/>
+            <axis xyz="0 1 0"/>
+            <origin xyz="0 -0.15 0"/>
+            <limit effort="1000.0" lower="-1.0" upper="1.0" velocity="0.5"/>
+        </joint>
+
+        <joint name="base_to_contact1" type="fixed">
+            <parent link="base_link"/>
+            <child link="contact_front"/>
+            <origin xyz="0 0 0"/>
+        </joint>
+
+        <joint name="base_to_contact2" type="fixed">
+            <parent link="base_link"/>
+            <child link="contact_back"/>
+            <origin xyz="0 0 0"/>
+        </joint>
+
+    </robot>

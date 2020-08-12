@@ -1,9 +1,13 @@
 <?xml version="1.0"?>
+<!-- Declaration du robot BEGIN -->
     <robot name="robot_2W">
+
+
+        <!-- Declaration de la base du Robot BEGIN -->
         <link name="base_link">
             <visual>
                 <geometry>
-                    <box size="0.2 .3 .1"/>
+                    <box size="0.2 0.3 0.1"/>
                 </geometry>
                 <origin rpy="0 0 0" xyz="0 0 0.05"/>
                 <material name="white">
@@ -12,7 +16,7 @@
             </visual>
             <collision>
                 <geometry>
-                    <box size="0.2 .3 .1"/>
+                    <box size="0.2 0.3 0.1"/>
                 </geometry>
                 <origin rpy="0 0 0" xyz="0 0 0.05"/>
             </collision>
@@ -21,61 +25,69 @@
                 <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
             </inertial>
         </link>
+        <!-- Declaration de la base du Robot END -->
 
-        <link name="wheel_1">
+        <!-- Declaration de la roue de gauche du robot BEGIN -->
+        <link name="wheel_L">
             <visual>
                 <geometry>
                     <cylinder length="0.05" radius="0.05"/>
                 </geometry>
                 <origin rpy="1.57 0 0" xyz="0 0.025 0"/>
-                <material name="black">
-                    <color rgba="0 0 0 1"/>
-                </material>
-            </visual>
-            <collision>
-                <geometry>
-                    <cylinder length="0.05" radius="0.05"/>
-                </geometry>
-                <origin rpy="1.57 0 0" xyz="0 0.025 0"/>
-            </collision>
-            <inertial>
-                <mass value="0.5"/>
-                <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
-            </inertial>
-        </link>
-
-        <link name="wheel_2">
-            <visual>
-                <geometry>
-                    <cylinder length="0.05" radius="0.05"/>
-                </geometry>
-                <origin rpy="1.57 0 0" xyz="0 -0.025 0"/>
-                <material name="black"/>
-            </visual>
-            <collision>
-                <geometry>
-                    <cylinder length="0.05" radius="0.05"/>
-                </geometry>
-                <origin rpy="1.57 0 0" xyz="0 -0.025 0"/>
-            </collision>
-            <inertial>
-                <mass value="0.5"/>
-                <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
-            </inertial>
-        </link>
-
-        <link name="contact_front">
-            <visual>
-                <geometry>
-                    <sphere radius="0.025"/>
-                </geometry>
-                <origin rpy="0 0 0" xyz="0.075 0 -0.025"/>
                 <material name="blue">
                     <color rgba="0 0 1 1"/>
                 </material>
             </visual>
             <collision>
                 <geometry>
+                    <cylinder length="0.05" radius="0.05"/>
+                </geometry>
+                <origin rpy="1.57 0 0" xyz="0 0.025 0"/>
+            </collision>
+            <inertial>
+                <mass value="0.5"/>
+                <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+            </inertial>
+        </link>
+        <!-- Declaration de la roue de gauche du robot END -->
+
+        <!-- Declaration de la roue de droite du robot BEGIN -->
+        <link name="wheel_R">
+            <visual>
+                <geometry>
+                    <cylinder length="0.05" radius="0.05"/>
+                </geometry>
+                <origin rpy="1.57 0 0" xyz="0 -0.025 0"/>
+                <material name="red">
+                    <color rgba="1 0 0 1"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder length="0.05" radius="0.05"/>
+                </geometry>
+                <origin rpy="1.57 0 0" xyz="0 -0.025 0"/>
+            </collision>
+            <inertial>
+                <mass value="0.5"/>
+                <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
+            </inertial>
+        </link>
+        <!-- Declaration de la roue de droite du robot END -->
+
+        <!-- Declaration du point d'appui avant BEGIN -->
+        <link name="contact_front">
+            <visual>
+                <geometry>
+                    <sphere radius="0.025"/>
+                </geometry>
+                <origin rpy="0 0 0" xyz="0.075 0 -0.025"/>
+                <material name="black">
+                    <color rgba="0 0 0 1"/>
+                </material>
+            </visual>
+            <collision>
+                <geometry>
                     <sphere radius="0.025"/>
                 </geometry>
                 <origin rpy="0 0 0" xyz="0.075 0 -0.025"/>
@@ -85,14 +97,16 @@
                 <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
             </inertial>
         </link>
+        <!-- Declaration du point d'appui avant END -->
 
+        <!-- Declaration du point d'appui arrière BEGIN -->
         <link name="contact_back">
             <visual>
                 <geometry>
                     <sphere radius="0.025"/>
                 </geometry>
                 <origin rpy="0 0 0" xyz="-0.075 0 -0.025"/>
-                <material name="blue"/>
+                <material name="black"/>
             </visual>
             <collision>
                 <geometry>
@@ -105,39 +119,94 @@
                 <inertia ixx="1" ixy="0.0" ixz="0.0" iyy="1" iyz="0.0" izz="1" />
             </inertial>
         </link>
+        <!-- Declaration du point d'appui arrière END -->
 
-        <joint name="base_to_wheel1" type="revolute">
+        <!-- Declaration de la liaison base/roue_gauche BEGIN -->
+        <joint name="base_to_wheelL" type="continuous">
+            <parent link="base_link"/>
+            <child link="wheel_L"/>
             <axis xyz="0 1 0"/>
             <origin xyz="0 0.15 0"/>
-            <limit effort="1000.0" lower="-1.0" upper="1.0" velocity="0.5"/>
-            <parent link="base_link"/>
-            <child link="wheel_1"/>
+            <limit effort="1000.0" velocity="10"/>
         </joint>
+        <!-- Declaration de la liaison base/roue_gauche END -->
 
-        <joint name="base_to_wheel2" type="revolute">
+        <!-- Declaration de la liaison base/roue_droite BEGIN -->
+        <joint name="base_to_wheelR" type="continuous">
             <parent link="base_link"/>
-            <child link="wheel_2"/>
+            <child link="wheel_R"/>
             <axis xyz="0 1 0"/>
             <origin xyz="0 -0.15 0"/>
-            <limit effort="1000.0" lower="-1.0" upper="1.0" velocity="0.5"/>
+            <limit effort="1000.0" velocity="10"/>
         </joint>
+        <!-- Declaration de la liaison base/roue_droite END -->
 
+        <!-- Declaration de la liaison base/contact_avant BEGIN -->
         <joint name="base_to_contact1" type="fixed">
             <parent link="base_link"/>
             <child link="contact_front"/>
             <origin xyz="0 0 0"/>
         </joint>
+        <!-- Declaration de la liaison base/contact_avant END -->
 
+        <!-- Declaration de la liaison base/contact_arriere BEGIN -->
         <joint name="base_to_contact2" type="fixed">
             <parent link="base_link"/>
             <child link="contact_back"/>
             <origin xyz="0 0 0"/>
         </joint>
+        <!-- Declaration de la liaison base/contact_arriere END -->
 
+        <!-- Plugin Gazebo BEGIN -->
         <gazebo>
-            <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-                <robotNamespace>/</robotNamespace>
+            <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+                <!-- Plugin update rate in Hz -->
+                <updateRate>20</updateRate>
+
+                <leftJoint>base_to_wheelL</leftJoint>
+                <rightJoint>base_to_wheelR</rightJoint>
+
+                <!-- The distance from the center of one wheel to the other, in meters, defaults to 0.34 m -->
+                <wheelSeparation>0.35</wheelSeparation>
+
+                <!-- Diameter of the wheels, in meters, defaults to 0.15 m -->
+                <wheelDiameter>0.1</wheelDiameter>
+
+                <!-- Wheel acceleration, in rad/s^2, defaults to 0.0 rad/s^2 -->
+                <wheelAcceleration>0</wheelAcceleration>
+
+                <!-- Maximum torque which the wheels can produce, in Nm, defaults to 5 Nm -->
+                <wheelTorque>5</wheelTorque>
+
+                <!-- Topic to receive geometry_msgs/Twist message commands, defaults to `cmd_vel` -->
+                <commandTopic>cmd_vel</commandTopic>
+
+                <!-- Topic to publish nav_msgs/Odometry messages, defaults to `odom` -->
+                <odometryTopic>odom</odometryTopic>
+
+                <!-- Odometry frame, defaults to `odom` -->
+                <odometryFrame>odom</odometryFrame>
+
+                <!-- Robot frame to calculate odometry from, defaults to `base_footprint` -->
+                <robotBaseFrame>base_link</robotBaseFrame>
+
+                <!-- Odometry source, 0 for ENCODER, 1 for WORLD, defaults to WORLD -->
+                <odometrySource>1</odometrySource>
+
+                <!-- Set to true to publish transforms for the wheel links, defaults to false -->
+                <publishWheelTF>true</publishWheelTF>
+
+                <!-- Set to true to publish transforms for the odometry, defaults to true -->
+                <publishOdom>true</publishOdom>
+
+                <!-- Set to true to publish sensor_msgs/JointState on /joint_states for the wheel joints, defaults to false -->
+                <publishWheelJointState>true</publishWheelJointState>
+
+                <!-- Set to true to swap right and left wheels, defaults to true -->
+                <legacyMode>false</legacyMode>
             </plugin>
         </gazebo>
+        <!-- Plugin Gazebo END -->
 
     </robot>
+<!-- Declaration du robot END -->

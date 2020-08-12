@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_2W">
+  <xacro:property name="wheel_radius" value="0.050" />
+  <xacro:property name="wheel_width" value="0.010" />
+  <xacro:property name="body_height" value="0.1" />
+  <xacro:property name="body_width" value="0.3" />
+  <xacro:property name="body_length" value="0.2" />
+  <xacro:property name="contact_radius" value="${(wheel_radius - 0.01)/2}"/>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/White</material>
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+  </gazebo>
+
+  <gazebo reference="wheel_R">
+    <material>Gazebo/Red</material>
+    <mu1>0.84</mu1>
+    <mu2>0.84</mu2>
+  </gazebo>
+
+  <gazebo reference="wheel_L">
+    <material>Gazebo/Blue</material>
+    <mu1>0.84</mu1>
+    <mu2>0.84</mu2>
+  </gazebo>
+
+  <gazebo reference="contact_front">
+    <material>Gazebo/Black</material>
+    <mu1>0.001</mu1>
+    <mu2>0.001</mu2>
+  </gazebo>
+
+  <gazebo reference="contact_back">
+    <material>Gazebo/Black</material>
+    <mu1>0.001</mu1>
+    <mu2>0.001</mu2>
+  </gazebo>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_height}"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.18"/>
+      <inertia ixx="6.0e-4" ixy="0" ixz="0" iyy="6.0e-4" iyz="0" izz="6.0e-4"/>
+    </inertial>
+  </link>
+
+  <link name="wheel_L">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.03"/>
+      <inertia ixx="1.75e-5" ixy="0.0" ixz="0.0" iyy="1.75e-5" iyz="0.0" izz="1.75e-5"/>
+    </inertial>
+  </link>
+
+  <link name="wheel_R">
+    <visual>
+      <geometry>
+        <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+    </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+        <cylinder length="${wheel_width}" radius="${wheel_radius}"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.03"/>
+      <inertia ixx="1.75e-5" ixy="0.0" ixz="0.0" iyy="1.75e-5" iyz="0.0" izz="1.75e-5"/>
+    </inertial>
+  </link>
+
+  <link name="contact_front">
+    <visual>
+      <geometry>
+        <sphere radius="${contact_radius}"/>
+        <origin xyz="0 0 ${contact_radius}"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+          <sphere radius="${contact_radius}"/>
+          <origin xyz="0 0 ${contact_radius}"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="6.0e-4" ixy="0" ixz="0" iyy="6.0e-4" iyz="0" izz="6.0e-4"/>
+    </inertial>
+  </link>
+
+  <link name="contact_back">
+    <visual>
+      <geometry>
+          <sphere radius="${contact_radius}"/>
+          <origin xyz="0 0 ${contact_radius}"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+          <sphere radius="${contact_radius}"/>
+          <origin xyz="0 0 ${contact_radius}"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="6.0e-4" ixy="0" ixz="0" iyy="6.0e-4" iyz="0" izz="6.0e-4"/>
+    </inertial>
+  </link>
+
+  <joint name="jointL" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_L"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0 ${body_width/2 + wheel_width/2} -${body_height/2 - 0.01}" rpy="${pi/2} 0 0" />
+    <dynamics friction="0.1"/>
+  </joint>
+
+  <joint name="jointR" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_R"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0 -${body_width/2 + wheel_width/2} -${body_height/2 - 0.01}" rpy="${pi/2} 0 0" />
+    <dynamics friction="0.1"/>
+  </joint>
+
+  <joint name="jointFront" type="fixed">
+    <parent link="base_link"/>
+    <child link="contact_front"/>
+    <origin xyz="+${3*body_length/8} 0 -${body_height/2 + contact_radius}"/>
+  </joint>
+
+  <joint name="jointBack" type="fixed">
+    <parent link="base_link"/>
+    <child link="contact_back"/>
+    <origin xyz="-${3*body_length/8} 0 -${body_height/2 + contact_radius}"/>
+  </joint>
+
+  <gazebo>
+      <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+          <!-- Plugin update rate in Hz -->
+          <updateRate>20</updateRate>
+
+          <leftJoint>base_to_wheelL</leftJoint>
+          <rightJoint>base_to_wheelR</rightJoint>
+
+          <!-- The distance from the center of one wheel to the other, in meters, defaults to 0.34 m -->
+          <wheelSeparation>0.35</wheelSeparation>
+
+          <!-- Diameter of the wheels, in meters, defaults to 0.15 m -->
+          <wheelDiameter>0.1</wheelDiameter>
+
+          <!-- Wheel acceleration, in rad/s^2, defaults to 0.0 rad/s^2 -->
+          <wheelAcceleration>0</wheelAcceleration>
+
+          <!-- Maximum torque which the wheels can produce, in Nm, defaults to 5 Nm -->
+          <wheelTorque>5</wheelTorque>
+
+          <!-- Topic to receive geometry_msgs/Twist message commands, defaults to `cmd_vel` -->
+          <commandTopic>/robot_2W/cmd_vel</commandTopic>
+
+          <!-- Topic to publish nav_msgs/Odometry messages, defaults to `odom` -->
+          <odometryTopic>odom</odometryTopic>
+
+          <!-- Odometry frame, defaults to `odom` -->
+          <odometryFrame>odom</odometryFrame>
+
+          <!-- Robot frame to calculate odometry from, defaults to `base_footprint` -->
+          <robotBaseFrame>base_link</robotBaseFrame>
+
+          <!-- Odometry source, 0 for ENCODER, 1 for WORLD, defaults to WORLD -->
+          <odometrySource>1</odometrySource>
+
+          <!-- Set to true to publish transforms for the wheel links, defaults to false -->
+          <publishWheelTF>true</publishWheelTF>
+
+          <!-- Set to true to publish transforms for the odometry, defaults to true -->
+          <publishOdom>true</publishOdom>
+
+          <!-- Set to true to publish sensor_msgs/JointState on /joint_states for the wheel joints, defaults to false -->
+          <publishWheelJointState>true</publishWheelJointState>
+
+          <!-- Set to true to swap right and left wheels, defaults to true -->
+          <legacyMode>false</legacyMode>
+      </plugin>
+  </gazebo>
+
+</robot>

@@ -70,7 +70,7 @@ speedBindings={
 class PublishThread(threading.Thread):
     def __init__(self, rate):
         super(PublishThread, self).__init__()
-        self.publisher = rospy.Publisher('cmd_vel', Twist, queue_size = 1)
+        self.publisher = rospy.Publisher('/diff_drive_2W_controller/cmd_vel', Twist, queue_size = 1)
         self.x = 0.0
         self.y = 0.0
         self.z = 0.0
@@ -213,7 +213,7 @@ if __name__=="__main__":
                 th = 0
                 if (key == '\x03'):
                     break
- 
+
             pub_thread.update(x, y, z, th, speed, turn)
 
     except Exception as e:

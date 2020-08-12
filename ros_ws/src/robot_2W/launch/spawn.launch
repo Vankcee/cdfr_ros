@@ -4,13 +4,12 @@
 
     <arg name="x" default="0"/>
     <arg name="y" default="0"/>
-    <arg name="z" default="0.05"/>
+    <arg name="z" default="0.2"/>
 
     <node name="robot_2W_spawn" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot_2W -x $(arg x) -y $(arg y) -z $(arg z)" />
 
     <rosparam file="$(find robot_2W)/config/diff_drive_2W.yaml" command="load" />
 
-    <node name="SARA_controller manager" pkg="controller_manager" type="spawner"
-          respawn="false" output="screen" args="diff_drive_2W_controller" />
+    <node name="controller" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="diff_drive_2W_controller" />
 
 </launch>

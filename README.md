@@ -22,9 +22,9 @@ Parts are described within `link` tags.
 
 You need to create the base of the robot. In this case its name is **base_link**. Give it a visual, collision and inertial description. Usually it's a `box` part.
 
->-<ins>Visual</ins> : What you see in the simulator.
--<ins>Collision</ins> : It is used for collisions and contacts calculation in the simulator.
--<ins>Inertial</ins> : How the part behaves when you add movements. 
+>- <ins>Visual</ins> : What you see in the simulator.
+- <ins>Collision</ins> : It is used for collisions and contacts calculation in the simulator.
+- <ins>Inertial</ins> : How the part behaves when you add movements. 
 
 Now we can add wheels (`cylinder` part) and contacts (`sphere` part) for stabilizing the robot.
 

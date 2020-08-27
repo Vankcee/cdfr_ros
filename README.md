@@ -23,9 +23,9 @@ Parts are described within `link` tags.
 
 You need to create the base of the robot. In this case its name is **base_link**. Give it a visual, collision and inertial description. Usually it's a `box` part.
 
-><ins>Visual</ins> : What you see in the simulator.
-<ins>Collision</ins> : It is used for collisions and contacts calculation in the simulator.
-<ins>Inertial</ins> : How the part behaves when you add movements.
+>- <ins>Visual</ins> : What you see in the simulator.
+>- <ins>Collision</ins> : It is used for collisions and contacts calculation in the simulator.
+>- <ins>Inertial</ins> : How the part behaves when you add movements. 
 
 Now we can add wheels (`cylinder` part) and contacts (`sphere` part) for stabilizing the robot.
 
@@ -36,12 +36,12 @@ All these links have to be connected together with mecanical links. We also have
 Wheel joints have continuous type. It enable a full rotation on the `axis` (check axis tag in joint description).
 
 >Types:
->-   <ins>revolute</ins> - a hinge joint that rotates along the axis and has a limited range specified by the upper and lower limits.
->-   <ins>continuous</ins> - a continuous hinge joint that rotates around the axis and has no upper and lower limits.
->-   <ins>prismatic</ins> - a sliding joint that slides along the axis, and has a limited range specified by the upper and lower limits.
->-   <ins>fixed</ins> - This is not really a joint because it cannot move. All degrees of freedom are locked. This type of joint does not require the axis, calibration, dynamics, limits or safety_controller.
->-   <ins>floating</ins> - This joint allows motion for all 6 degrees of freedom.
->-   <ins>planar</ins> - This joint allows motion in a plane perpendicular to the axis.
+>-   revolute - a hinge joint that rotates along the axis and has a limited range specified by the upper and lower limits.
+>-   continuous - a continuous hinge joint that rotates around the axis and has no upper and lower limits.
+>-   prismatic - a sliding joint that slides along the axis, and has a limited range specified by the upper and lower limits.
+>-   fixed - This is not really a joint because it cannot move. All degrees of freedom are locked. This type of joint does not require the axis, calibration, dynamics, limits or safety_controller.
+>-   floating - This joint allows motion for all 6 degrees of freedom.
+>-   planar - This joint allows motion in a plane perpendicular to the axis.
 
 The mechanical link referential is the `parent` referential. The child corresponds to the second part of the mechanical link.
 
@@ -53,4 +53,14 @@ ROS contains a tons of tools to simulate and visualize robots.
 
 Here we use **Rviz** to check that the robot descriptor is correct and that the robot looks like what you want.
 
-I advise to parse the xacro file before launching rviz.
+I advise to parse the xacro file before launching rviz:
+> \>>xacro robot_2W.urdf.xacro > parse.urdf
+> \>>check_urdf parse.urdf
+
+If there's no error it shows you the root link and childs links. Otherwise the prompt helps you to modify your xacro file in order to fix issues.
+
+When the xacro is correct, you can run rviz. I created a launcher file for rviz. It uses an rviz config file and create a rviz node.
+> [/src/robot2W/launch/display.launch](https://github.com/Vankcee/cdfr_ros/blob/master/ros_ws/src/robot_2W/launch/display.launch)
+
+You can run the launch file as follows:
+> \>>roslaunch robot_2W display.launch

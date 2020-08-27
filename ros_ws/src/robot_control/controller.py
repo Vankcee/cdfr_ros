@@ -8,6 +8,8 @@ from geometry_msgs.msg import Twist
 from math import atan2
 from math import sqrt
 
+speed_cmd=None
+
 def getOdom(msg):
     global rob_x
     global rob_y
@@ -32,9 +34,9 @@ dt_error = 0
 prev_error = 0
 prev_time = rospy.get_time()
 
-P = 100
-I = 0
-D = 0
+P = 1.5
+I = 0.0001
+D = 2
 
 def pid(value,objectif):
     global error_value
@@ -44,12 +46,18 @@ def pid(value,objectif):
     global prev_error
     global prev_time
 
-    current_time = rospy.get_time()
+
 
     error_value = objectif - value
     sum_error = sum_error + error_value
-    #dt_error = (error_value-prev_error)/(current_time-prev_time)
 
+    current_time = rospy.get_time()
+
+    dt_time = current_time - prev_time
+    if dt_time:
+        dt_error = (error_value-prev_error)/(dt_time)
+    else:
+        dt_error = (error_value-prev_error)/(0.0001)
     prev_time = current_time
     prev_error = error_value
 
@@ -67,10 +75,10 @@ speed_cmd = Twist()
 
 waypoints = []
 
-waypoints.append( Point(1,1,0))
-waypoints.append( Point(1,2,0))
-waypoints.append( Point(0,2,0))
-waypoints.append( Point(5,5,0))
+waypoints.append( Point(2,4,0))
+waypoints.append( Point(5,7,0))
+waypoints.append( Point(2,-3,0))
+waypoints.append( Point(-1,-1,0))
 
 rate = rospy.Rate(10)
 
@@ -92,7 +100,7 @@ def calc_cmd(goal):
     # print("dist "+str(dist)+"\n")
     # print("\n")
 
-    if dist >= 0.1:
+    if dist >= 0.2:
         cmd.linear.x = dist
         cmd.angular.z = pid(rob_theta,goal_rot)
     else:
@@ -104,17 +112,24 @@ def calc_cmd(goal):
 
 
 def isNear(x,y):
+    result = False
+
     delta_x = x - rob_x
     delta_y = y - rob_y
 
     dist = sqrt((delta_x*delta_x)+(delta_y*delta_y))
     print(dist)
 
-    return (dist < 0.2)
+    if (dist<0.2):
+        result = True
+    return result
 
 
 
 def follow_way():
+
+    global speed_cmd
+
     if not isNear(waypoints[-1].x,waypoints[-1].y):
         for goal in waypoints:
             print("X = "+str(goal.x)+" // Y = "+str(goal.y))
@@ -124,7 +139,10 @@ def follow_way():
                 rate.sleep()
                 print("X = "+str(goal.x)+" // Y = "+str(goal.y))
             print("//Point : X= "+str(rob_x)+" Y= "+str(rob_y)+" //")
-
+    speed_cmd.linear.x = 0
+    speed_cmd.angular.z = 0
+    pub.publish(speed_cmd)
+    print("GOAL ACHIEVED !")
 
 while not rospy.is_shutdown():
     follow_way()

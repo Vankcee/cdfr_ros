@@ -27,14 +27,14 @@
 
   <gazebo reference="contact_front">
     <material>Gazebo/Black</material>
-    <mu1>0.001</mu1>
-    <mu2>0.001</mu2>
+    <mu1>0</mu1>
+    <mu2>0</mu2>
   </gazebo>
 
   <gazebo reference="contact_back">
     <material>Gazebo/Black</material>
-    <mu1>0.001</mu1>
-    <mu2>0.001</mu2>
+    <mu1>0</mu1>
+    <mu2>0</mu2>
   </gazebo>
 
   <link name="base_link">

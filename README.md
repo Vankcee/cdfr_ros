@@ -9,10 +9,10 @@ You can find more information on the [project website](https://www.ros.org/about
 ## First : Install ROS
 I advise you to install the latest long term service (LTS) ROS release. You can find it on the ros project main page.
 
-## 	
+Follow installation instruction for your operating system
 
 ## Create the Robot Model
->[/src/robot2W/urdf/robot_2W.urdf.xacro](https://github.com/Vankcee/cdfr_ros/blob/master/ros_ws/src/robot_2W/urdf/robot_2W.urdf.xacro)
+>[/src/robot2W/urdf/robot_2W.xacro](https://github.com/Vankcee/cdfr_ros/blob/master/ros_ws/src/robot_2W/urdf/robot_2W.xacro)
 
 Usually robot models are described in urdf files. In this project I used a xacro file. This is an xml macro file. It makes the model creation easier.
 
@@ -23,9 +23,9 @@ Parts are described within `link` tags.
 
 You need to create the base of the robot. In this case its name is **base_link**. Give it a visual, collision and inertial description. Usually it's a `box` part.
 
->- <ins>Visual</ins> : What you see in the simulator.
->- <ins>Collision</ins> : It is used for collisions and contacts calculation in the simulator.
->- <ins>Inertial</ins> : How the part behaves when you add movements. 
+><ins>Visual</ins> : What you see in the simulator.
+<ins>Collision</ins> : It is used for collisions and contacts calculation in the simulator.
+<ins>Inertial</ins> : How the part behaves when you add movements.
 
 Now we can add wheels (`cylinder` part) and contacts (`sphere` part) for stabilizing the robot.
 
@@ -54,7 +54,7 @@ ROS contains a tons of tools to simulate and visualize robots.
 Here we use **Rviz** to check that the robot descriptor is correct and that the robot looks like what you want.
 
 I advise to parse the xacro file before launching rviz:
-> \>>xacro robot_2W.urdf.xacro > parse.urdf
+> \>>xacro robot_2W.xacro > parse.urdf
 > \>>check_urdf parse.urdf
 
 If there's no error it shows you the root link and childs links. Otherwise the prompt helps you to modify your xacro file in order to fix issues.
@@ -64,3 +64,41 @@ When the xacro is correct, you can run rviz. I created a launcher file for rviz.
 
 You can run the launch file as follows:
 > \>>roslaunch robot_2W display.launch
+
+### Robot VIsualiZer / RVIZ
+Now that RVIZ is running you have something like that :
+![RVIZ Main screen with robot](https://github.com/Vankcee/cdfr_ros/blob/master/img/RVIZ_main.jpg)
+
+Now that you can see the robot, modify it as you wish
+## Control the robot
+### Controllers
+We want to send a movement command to robot wheels. So we need to send a message that contains command values to wheels. To simplify integration and developpement we use a model for the differential wheeled robot. It allows us to send comprehensive commands like a velocity on x axis and a rotation on z axis.
+
+Multiple controllers exist. We can develop our own or take an existing one. Gazebo has a differential wheeled robot model controller. We use it, it is called in the xacro description file under `gazebo` tag.
+
+Then we must configure the controller settings
+> [Controller Settings](https://github.com/Vankcee/cdfr_ros/blob/master/ros_ws/src/robot_2W/config/diff_drive_2W.yaml)
+
+Make sure that left and right wheels attributes are correct. They refer to the link of the wheel in the description file.
+
+### First movement try
+Launch Gazebo with an empty world map.
+> \>> roslaunch gazebo_ros empty_world.launch
+
+The robot need a spawner to spawn in gazebo environnement. Check my [spawner launcher](https://github.com/Vankcee/cdfr_ros/blob/master/ros_ws/src/robot_2W/launch/spawn.launch)
+
+Gazebo looks like this now:
+![Gazebo with a robot on the middle](https://github.com/Vankcee/cdfr_ros/blob/robot_control/img/RVIZ_main.jpg)
+
+Try first to controll the robot with this package : [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard)
+It converts your keyboard into a controll pad. To use it, launch teleop script when your robot is in gazebo environnement. Enter commands in the terminal that runs teleop script because it catches the input of the terminal.
+
+Normally the robot moves !!!
+
+## Automate the robot
+
+You can create a script now to automate the robot.
+I create this [script](https://github.com/Vankcee/cdfr_ros/blob/robot_control/ros_ws/src/robot_control/controller.py) under robot_control package.
+
+It follows a path. The path is composed of waypoints of type `Point`.
+It uses a PID to enslave the movement of the robot.

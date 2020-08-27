@@ -10,7 +10,7 @@
         file="$(find robot_2W)/config/joints.yaml"
         ns="robot_2W_joint_state_controller" /> -->
 
-    <param name="robot_description" command="$(find xacro)/xacro.py $(find robot_2W)/urdf/robot_2W.urdf.xacro"/>
+    <param name="robot_description" command="$(find xacro)/xacro.py $(find robot_2W)/urdf/robot_2W.xacro"/>
     <param name="use_gui" value="$(arg gui)"/>
 
     <!-- <node name="robot_2W_controller_spawner" pkg="controller_manager" type="spawner"

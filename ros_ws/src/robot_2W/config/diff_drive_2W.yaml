@@ -2,7 +2,7 @@ diff_drive_2W_controller:
   type        : "diff_drive_controller/DiffDriveController"
   left_wheel  : 'jointL'
   right_wheel : 'jointR'
-  publish_rate: 50.0               # default: 50
+  publish_rate: 50             # default: 50
   pose_covariance_diagonal : [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
   twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
 

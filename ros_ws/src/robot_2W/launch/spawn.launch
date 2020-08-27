@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-    <param name="robot_description" command="$(find xacro)/xacro.py $(find robot_2W)/urdf/robot_2W.urdf.xacro" />
+    <param name="robot_description" command="$(find xacro)/xacro.py $(find robot_2W)/urdf/robot_2W.xacro" />
 
     <arg name="x" default="0"/>
     <arg name="y" default="0"/>

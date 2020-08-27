@@ -88,7 +88,7 @@ Launch Gazebo with an empty world map.
 The robot need a spawner to spawn in gazebo environnement. Check my [spawner launcher](https://github.com/Vankcee/cdfr_ros/blob/master/ros_ws/src/robot_2W/launch/spawn.launch)
 
 Gazebo looks like this now:
-![Gazebo with a robot on the middle](https://github.com/Vankcee/cdfr_ros/blob/robot_control/img/RVIZ_main.jpg)
+![Gazebo with a robot on the middle](https://github.com/Vankcee/cdfr_ros/blob/master/img/RVIZ_main.jpg)
 
 Try first to controll the robot with this package : [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard)
 It converts your keyboard into a controll pad. To use it, launch teleop script when your robot is in gazebo environnement. Enter commands in the terminal that runs teleop script because it catches the input of the terminal.
